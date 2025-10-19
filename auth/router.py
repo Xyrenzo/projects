@@ -24,7 +24,7 @@ def register(
     try:
         ip_address = get_client_ip(request)
         user_id = AuthService.register_user(username, email, password, ip_address)
-        return RedirectResponse(url=f"/quiz/questions?user_id={user_id}", status_code=303)
+        return RedirectResponse(url=f"/questions?user_id={user_id}", status_code=303)
     except Exception as e:
         return {"error": str(e)}
 
