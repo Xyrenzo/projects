@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Сбалансированный тип</title>
+    <style>
+      /* Все существующие стили из A.html */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        padding-top: 100px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+      }
+
+      .header-box {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 30px;
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 0 60px rgba(102, 102, 255, 0.1),
+          0 8px 32px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+      }
+
+      .header-box::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #6666ff, #8a2be2, #6666ff, #8a2be2);
+        border-radius: 20px;
+        z-index: -1;
+        animation: glow 3s ease-in-out infinite;
+        opacity: 0.6;
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(102, 102, 255, 0.5),
+            0 0 40px rgba(102, 102, 255, 0.3), 0 0 60px rgba(102, 102, 255, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(102, 102, 255, 0.7),
+            0 0 60px rgba(102, 102, 255, 0.5), 0 0 90px rgba(102, 102, 255, 0.3);
+        }
+      }
+
+      .type-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: white;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        color: #1a1a2e;
+        margin-bottom: 15px;
+        font-size: 36px;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
+      .filters-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+      }
+
+      .filter-btn {
+        padding: 12px 25px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #e0e0e0;
+        border-radius: 15px;
+        color: #1a1a2e;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .filter-btn:hover {
+        border-color: #6666ff;
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .filter-btn.active {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        color: white;
+        border-color: #6666ff;
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.5),
+          0 0 40px rgba(102, 102, 255, 0.3);
+      }
+
+      .legend {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .demand-indicator {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+      }
+
+      .demand-high {
+        background: linear-gradient(135deg, #ff4444, #cc0000);
+      }
+
+      .demand-medium {
+        background: linear-gradient(135deg, #ffbb33, #ff8800);
+      }
+
+      .demand-low {
+        background: linear-gradient(135deg, #00C851, #007E33);
+      }
+
+      .legend-text {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .section-title {
+        margin: 40px 0 20px 0;
+      }
+
+      .section-title h2 {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 600;
+        text-shadow: 0 0 10px rgba(102, 102, 255, 0.3);
+      }
+
+      .professions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .profession-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 0 15px rgba(102, 102, 255, 0.2),
+          0 0 30px rgba(102, 102, 255, 0.1), 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .profession-card::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        right: -1px;
+        bottom: -1px;
+        background: linear-gradient(45deg, #6666ff, #8a2be2);
+        border-radius: 15px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .profession-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 25px rgba(102, 102, 255, 0.4),
+          0 0 50px rgba(102, 102, 255, 0.2);
+      }
+
+      .profession-card:hover::before {
+        opacity: 0.1;
+      }
+
+      .profession-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .profession-name {
+        font-weight: 700;
+        color: #1a1a2e;
+        font-size: 18px;
+      }
+
+      .profession-description {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .toggle-details {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(102, 102, 255, 0.3);
+        width: 100%;
+      }
+
+      .toggle-details:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.5);
+      }
+
+      .details-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .details-content.open {
+        max-height: 1000px;
+      }
+
+      .universities-section {
+        margin-top: 20px;
+      }
+
+      .universities-title {
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 15px;
+        font-size: 16px;
+      }
+
+      .university-list {
+        display: grid;
+        gap: 15px;
+      }
+
+      .university-item {
+        background: rgba(102, 102, 255, 0.05);
+        border-radius: 10px;
+        padding: 15px;
+      }
+
+      .university-name {
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 5px;
+      }
+
+      .university-requirements {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .back-button {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        color: white;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 15px rgba(102, 102, 255, 0.3);
+        margin-top: 20px;
+      }
+
+      .back-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px rgba(102, 102, 255, 0.5);
+      }
+
+      .main-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 0 60px rgba(102, 102, 255, 0.1),
+          0 8px 32px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        padding: 15px 0;
+        transition: transform 0.3s ease;
+        transform: translateY(0);
+      }
+
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1a1a2e;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo::before {
+        content: "🎯";
+        font-size: 28px;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-link {
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 25px;
+        text-decoration: none;
+        color: #1a1a2e;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-link::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        right: -1px;
+        bottom: -1px;
+        background: linear-gradient(45deg, #6666ff, #8a2be2);
+        border-radius: 25px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.4),
+          0 0 40px rgba(102, 102, 255, 0.2);
+      }
+
+      .nav-link:hover::before {
+        opacity: 0.3;
+      }
+
+      .nav-link.active {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        color: #ffffff;
+        box-shadow: 0 0 15px rgba(102, 102, 255, 0.5),
+          0 0 30px rgba(102, 102, 255, 0.3);
+      }
+
+      /* Кнопка переключения темы */
+      .theme-toggle {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(102, 102, 255, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .theme-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.5);
+      }
+
+      /* Кнопка настроек */
+      .settings-toggle {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(102, 102, 255, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 16px;
+      }
+
+      .settings-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.5);
+      }
+
+      /* Вращение иконки настроек */
+      .settings-icon {
+        transition: transform 0.3s ease;
+      }
+
+      .settings-icon.open {
+        transform: rotate(90deg);
+      }
+
+      /* Панель настроек */
+      .settings-panel {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 0 60px rgba(102, 102, 255, 0.1),
+          0 8px 32px rgba(0, 0, 0, 0.3);
+        z-index: 1001;
+        width: 300px;
+        display: none;
+      }
+
+      .settings-panel h3 {
+        margin-top: 0;
+        color: #1a1a2e;
+        text-align: center;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .setting-item {
+        margin-bottom: 15px;
+      }
+
+      .setting-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        color: #1a1a2e;
+        font-weight: 500;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+      body.dark-theme .settings-panel {
+        background: rgba(30, 30, 46, 0.95);
+      }
+
+      body.dark-theme .setting-label {
+        color: #ffffff;
+      }
+
+      body.dark-theme .settings-panel h3 {
+        color: #ffffff;
+        border-bottom: 1px solid #4a4a8a;
+      }
+
+      /* Темная тема */
+      body.dark-theme {
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%);
+      }
+
+      body.dark-theme .main-header {
+        background: rgba(30, 30, 46, 0.95);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 0 60px rgba(102, 102, 255, 0.1),
+          0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      body.dark-theme .logo {
+        color: #ffffff;
+      }
+
+      body.dark-theme .nav-link {
+        background: rgba(30, 30, 46, 0.9);
+        color: #ffffff;
+      }
+
+      body.dark-theme .header-box {
+        background: rgba(30, 30, 46, 0.95);
+      }
+
+      body.dark-theme h1 {
+        color: #ffffff;
+      }
+
+      body.dark-theme .subtitle {
+        color: #aaaaaa;
+      }
+
+      /* Removed redundant dark theme rule since headings are now white by default */
+
+      body.dark-theme .profession-card {
+        background: rgba(30, 30, 46, 0.95);
+      }
+
+      body.dark-theme .profession-name {
+        color: #ffffff;
+      }
+
+      body.dark-theme .profession-description {
+        color: #cccccc;
+      }
+
+      body.dark-theme .filter-btn {
+        background: rgba(30, 30, 46, 0.9);
+        color: #ffffff;
+        border-color: #4a4a8a;
+      }
+
+      body.dark-theme .legend-text {
+        color: #aaaaaa;
+      }
+
+      body.dark-theme .university-item {
+        background: rgba(102, 102, 255, 0.1);
+      }
+
+      body.dark-theme .university-name {
+        color: #ffffff;
+      }
+
+      body.dark-theme .university-requirements {
+        color: #cccccc;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Фиксированный хедер -->
+    <header class="main-header" id="mainHeader">
+      <div class="header-container">
+        <a href="/" class="logo">CareerGuide</a>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <nav class="nav-menu">
+            <a href="/questions?user_id={{ user_id }}" class="nav-link">Тест</a>
+            <a href="/results?user_id={{ user_id }}" class="nav-link">Результаты</a>
+            <a href="/chat/?user_id={{ user_id }}" class="nav-link">Чат-бот</a>
+            <a href="/all?user_id={{ user_id }}" class="nav-link active">Все типы</a>
+          </nav>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="settings-toggle" id="settingsToggle" title="Настройки">
+              <svg class="settings-icon" id="settingsIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="header-box">
+        <div
+          class="type-badge"
+          style="background: linear-gradient(135deg, #667eea, #764ba2)"
+        >
+          Все типы
+        </div>
+        <h1>Сбалансированный тип</h1>
+        <p class="subtitle">Фильтруйте профессии по типам личности</p>
+      </div>
+
+      <!-- Компактные фильтры -->
+      <div class="filters-container">
+        <button class="filter-btn" data-type="A">Тип A</button>
+        <button class="filter-btn" data-type="B">Тип B</button>
+        <button class="filter-btn" data-type="C">Тип C</button>
+        <button class="filter-btn" data-type="D">Тип D</button>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="demand-indicator demand-high"></div>
+          <span class="legend-text">Высокий спрос</span>
+        </div>
+        <div class="legend-item">
+          <div class="demand-indicator demand-medium"></div>
+          <span class="legend-text">Средний спрос</span>
+        </div>
+        <div class="legend-item">
+          <div class="demand-indicator demand-low"></div>
+          <span class="legend-text">Низкий спрос</span>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>🔥 Популярные профессии</h2>
+      </div>
+
+      <div class="professions-grid" id="popularProfessions">
+        <!-- Профессии загрузятся через JavaScript -->
+      </div>
+
+      <div class="section-title">
+        <h2>💎 Нишевые профессии</h2>
+      </div>
+
+      <div class="professions-grid" id="nicheProfessions">
+        <!-- Профессии загрузятся через JavaScript -->
+      </div>
+
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="/results?user_id={{ user_id }}" class="back-button" id="backButton"
+          >← Вернуться к результатам теста</a
+        >
+      </div>
+    </div>
+
+    <!-- Панель настроек -->
+    <div class="settings-panel" id="settingsPanel">
+      <h3>Настройки</h3>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span>Уведомления</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="notificationsToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let selectedTypes = [];
+
+      // Данные профессий для всех типов
+      const allProfessionsData = {
+        A: {
+          popular: [
+            {
+              name: "Инженер-строитель",
+              demand: "high",
+              description:
+                "Проектирование и строительство зданий и инфраструктуры.",
+              universities: { world: [], kazakhstan: [] },
+            },
+            {
+              name: "Механик",
+              demand: "high",
+              description: "Обслуживание и ремонт механизмов и оборудования.",
+              universities: { world: [], kazakhstan: [] },
+            },
+          ],
+          niche: [
+            {
+              name: "Оператор дрона",
+              demand: "high",
+              description: "Управление беспилотными летательными аппаратами.",
+              universities: { world: [], kazakhstan: [] },
+            },
+          ],
+        },
+        B: {
+          popular: [
+            {
+              name: "Менеджер по продажам",
+              demand: "high",
+              description: "Работа с клиентами и заключение сделок.",
+              universities: { world: [], kazakhstan: [] },
+            },
+            {
+              name: "HR-специалист",
+              demand: "medium",
+              description: "Подбор и развитие персонала в компании.",
+              universities: { world: [], kazakhstan: [] },
+            },
+          ],
+          niche: [
+            {
+              name: "Ивент-менеджер",
+              demand: "medium",
+              description: "Организация мероприятий и корпоративных событий.",
+              universities: { world: [], kazakhstan: [] },
+            },
+          ],
+        },
+        C: {
+          popular: [
+            {
+              name: "Графический дизайнер",
+              demand: "high",
+              description: "Создание визуального контента и брендинга.",
+              universities: { world: [], kazakhstan: [] },
+            },
+            {
+              name: "Архитектор",
+              demand: "medium",
+              description: "Проектирование зданий и архитектурных решений.",
+              universities: { world: [], kazakhstan: [] },
+            },
+          ],
+          niche: [
+            {
+              name: "Реставратор",
+              demand: "medium",
+              description: "Восстановление исторических объектов и артефактов.",
+              universities: { world: [], kazakhstan: [] },
+            },
+          ],
+        },
+        D: {
+          popular: [
+            {
+              name: "Аналитик данных",
+              demand: "high",
+              description: "Анализ больших данных и бизнес-аналитика.",
+              universities: { world: [], kazakhstan: [] },
+            },
+            {
+              name: "Финансовый аналитик",
+              demand: "high",
+              description: "Анализ финансовых рынков и инвестиций.",
+              universities: { world: [], kazakhstan: [] },
+            },
+          ],
+          niche: [
+            {
+              name: "Биоинформатик",
+              demand: "medium",
+              description: "Анализ биологических данных с помощью IT.",
+              universities: { world: [], kazakhstan: [] },
+            },
+          ],
+        },
+      };
+
+      // Функция для сохранения выбранных типов в localStorage
+      function saveSelectedTypes() {
+        localStorage.setItem('selectedProfessionTypes', JSON.stringify(selectedTypes));
+      }
+
+      // Функция для загрузки выбранных типов из localStorage
+      function loadSelectedTypes() {
+        const savedTypes = localStorage.getItem('selectedProfessionTypes');
+        if (savedTypes) {
+          selectedTypes = JSON.parse(savedTypes);
+        }
+      }
+
+      // Функция для обновления состояния кнопок фильтров
+      function updateFilterButtons() {
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        filterButtons.forEach(btn => {
+          const type = btn.dataset.type;
+          if (selectedTypes.includes(type)) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+
+      // Функция для подсветки активной страницы в навигации
+      function highlightActivePage() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        navLinks.forEach(link => {
+          if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+
+      // Инициализация фильтров
+      document.addEventListener("DOMContentLoaded", function () {
+        // Загружаем сохраненные фильтры
+        loadSelectedTypes();
+        
+        // Обновляем состояние кнопок
+        updateFilterButtons();
+        
+        // Подсвечиваем активную страницу
+        highlightActivePage();
+        
+        // Рендерим профессии с учетом сохраненных фильтров
+        renderProfessions();
+
+        const filterButtons = document.querySelectorAll(".filter-btn");
+
+        filterButtons.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const type = this.dataset.type;
+
+            if (selectedTypes.includes(type)) {
+              // Убираем тип если уже выбран
+              selectedTypes = selectedTypes.filter((t) => t !== type);
+              this.classList.remove("active");
+            } else {
+              // Добавляем тип если меньше 3
+              if (selectedTypes.length < 3) {
+                selectedTypes.push(type);
+                this.classList.add("active");
+              }
+            }
+
+            // Сохраняем выбранные типы
+            saveSelectedTypes();
+            
+            renderProfessions();
+          });
+        });
+      });
+
+      function renderProfessions() {
+        let popularProfessions = [];
+        let nicheProfessions = [];
+
+        if (selectedTypes.length === 0) {
+          // Если ничего не выбрано - показываем ВСЕ профессии
+          Object.values(allProfessionsData).forEach((typeData) => {
+            popularProfessions = [...popularProfessions, ...typeData.popular];
+            nicheProfessions = [...nicheProfessions, ...typeData.niche];
+          });
+        } else {
+          // Показываем профессии только выбранных типов
+          selectedTypes.forEach((type) => {
+            if (allProfessionsData[type]) {
+              popularProfessions = [
+                ...popularProfessions,
+                ...allProfessionsData[type].popular,
+              ];
+              nicheProfessions = [
+                ...nicheProfessions,
+                ...allProfessionsData[type].niche,
+              ];
+            }
+          });
+        }
+
+        // Убираем дубликаты
+        popularProfessions = popularProfessions.filter(
+          (prof, index, self) =>
+            index === self.findIndex((p) => p.name === prof.name)
+        );
+        nicheProfessions = nicheProfessions.filter(
+          (prof, index, self) =>
+            index === self.findIndex((p) => p.name === prof.name)
+        );
+
+        // Рендерим профессии
+        document.getElementById("popularProfessions").innerHTML =
+          popularProfessions.map((prof) => createProfessionCard(prof)).join("");
+
+        document.getElementById("nicheProfessions").innerHTML = nicheProfessions
+          .map((prof) => createProfessionCard(prof))
+          .join("");
+      }
+
+      // Функция создания карточки профессии (из A.html)
+      function createProfessionCard(profession) {
+        const demandClass = `demand-${profession.demand}`;
+
+        return `
+                <div class="profession-card">
+                    <div class="profession-header">
+                        <div class="profession-name">${profession.name}</div>
+                        <div class="demand-indicator ${demandClass}"></div>
+                    </div>
+                    <div class="profession-description">${
+                      profession.description
+                    }</div>
+                    
+                    <button class="toggle-details" onclick="toggleDetails(this)">
+                        Показать вузы и требования
+                    </button>
+                    
+                    <div class="details-content">
+                        <div class="universities-section">
+                            <div class="universities-title">🌍 Топ вузы мира</div>
+                            <div class="university-list">
+                                ${profession.universities.world
+                                  .map(
+                                    (uni) => `
+                                    <div class="university-item">
+                                        <div class="university-name">${uni.name}</div>
+                                        <div class="university-requirements">📋 ${uni.requirements}</div>
+                                    </div>
+                                `
+                                  )
+                                  .join("")}
+                            </div>
+                        </div>
+                        
+                        <div class="universities-section">
+                            <div class="universities-title">🇰🇿 Топ вузы Казахстана</div>
+                            <div class="university-list">
+                                ${profession.universities.kazakhstan
+                                  .map(
+                                    (uni) => `
+                                    <div class="university-item">
+                                        <div class="university-name">${uni.name}</div>
+                                        <div class="university-requirements">📋 ${uni.requirements}</div>
+                                    </div>
+                                `
+                                  )
+                                  .join("")}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      function toggleDetails(button) {
+        const card = button.closest(".profession-card");
+        const details = card.querySelector(".details-content");
+
+        if (details.classList.contains("open")) {
+          details.classList.remove("open");
+          button.textContent = "Показать вузы и требования";
+        } else {
+          details.classList.add("open");
+          button.textContent = "Скрыть вузы и требования";
+        }
+      }
+
+      // Подсветка активной страницы
+      function highlightActivePage() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        navLinks.forEach((link) => {
+          const linkPath = link.getAttribute("href").split("?")[0];
+          if (linkPath === currentPath || (linkPath === '/all' && currentPath === '/all/')) {
+            link.classList.add("active");
+          } else {
+            link.classList.remove("active");
+          }
+        });
+      }
+
+      // Инициализация при загрузке страницы
+      document.addEventListener('DOMContentLoaded', function() {
+        // Header scroll behavior
+        let lastScrollTop = 0;
+        const header = document.getElementById('mainHeader');
+        
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Scrolling down - hide header
+                header.style.transform = 'translateY(-100%)';
+                header.style.transition = 'transform 0.3s ease';
+            } else {
+                // Scrolling up - show header
+                header.style.transform = 'translateY(0)';
+                header.style.transition = 'transform 0.3s ease';
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+        
+        // Settings panel functionality
+        const settingsToggle = document.getElementById('settingsToggle');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsIcon = document.getElementById('settingsIcon');
+        const darkThemeToggle = document.getElementById('darkThemeToggle');
+        const body = document.body;
+        
+        // Проверяем сохраненную тему в localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-theme');
+            darkThemeToggle.checked = true;
+        }
+        
+        // Theme toggle in settings panel
+        darkThemeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Settings panel toggle with rotation animation
+        settingsToggle.addEventListener('click', function() {
+            if (settingsPanel.style.display === 'block') {
+                // Closing panel - rotate back to original position
+                settingsIcon.classList.remove('open');
+                settingsPanel.style.display = 'none';
+            } else {
+                // Opening panel - rotate icon
+                settingsIcon.classList.add('open');
+                settingsPanel.style.display = 'block';
+            }
+        });
+        
+        // Close settings panel when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!settingsPanel.contains(event.target) && 
+                event.target !== settingsToggle && 
+                !settingsToggle.contains(event.target)) {
+                settingsPanel.style.display = 'none';
+                settingsIcon.classList.remove('open');
+            }
+        });
+        
+        // Проверяем, есть ли user_id
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get("user_id");
+        
+        // Скрываем кнопку "назад", если нет user_id
+        if (!userId) {
+          const backButton = document.getElementById('backButton');
+          if (backButton) {
+            backButton.style.display = 'none';
+          }
+        }
+        
+        if (userId) {
+          loadSelectedTypes();
+          updateFilterButtons();
+          filterProfessions();
+        } else {
+          // Для публичной страницы просто показываем все профессии
+          filterProfessions();
+        }
+        
+        highlightActivePage();
+      });
+    </script>
+
+    <!-- Панель настроек -->
+    <div class="settings-panel" id="settingsPanel">
+      <h3>Настройки</h3>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span>Темная тема</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="darkThemeToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span>Уведомления</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="notificationsToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span>Профиль</span>
+          <button class="btn" style="padding: 5px 10px; font-size: 12px;" onclick="window.location.href='/profile?user_id={{ user_id }}'">Открыть</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

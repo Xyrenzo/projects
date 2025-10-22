@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Результаты теста</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        padding-top: 100px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 800px;
+      }
+
+      .quiz-box {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 50px 40px;
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 0 60px rgba(102, 102, 255, 0.1),
+          0 8px 32px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .quiz-box::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #6666ff, #8a2be2, #6666ff, #8a2be2);
+        border-radius: 20px;
+        z-index: -1;
+        animation: glow 3s ease-in-out infinite;
+        opacity: 0.6;
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(102, 102, 255, 0.5),
+            0 0 40px rgba(102, 102, 255, 0.3), 0 0 60px rgba(102, 102, 255, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(102, 102, 255, 0.7),
+            0 0 60px rgba(102, 102, 255, 0.5), 0 0 90px rgba(102, 102, 255, 0.3);
+        }
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      h2 {
+        color: #1a1a2e;
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px rgba(102, 102, 255, 0.3),
+          0 0 20px rgba(102, 102, 255, 0.2);
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .btn {
+        padding: 14px 30px;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .settings-panel .btn {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        color: white;
+        border: none;
+      }
+
+      .btn-prev {
+        background: white;
+        color: #333;
+        border: 2px solid #e0e0e0;
+      }
+
+      .btn-prev:hover:not(:disabled) {
+        border-color: #6666ff;
+        box-shadow: 0 0 15px rgba(102, 102, 255, 0.2),
+          0 0 30px rgba(102, 102, 255, 0.1);
+      }
+
+      .btn-next {
+        background: linear-gradient(135deg, #6666ff 0%, #8a2be2 100%);
+        color: #ffffff;
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.4),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 4px 15px rgba(102, 102, 255, 0.3);
+        flex: 1;
+      }
+
+      .btn-next:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(102, 102, 255, 0.6),
+          0 0 60px rgba(102, 102, 255, 0.4), 0 6px 20px rgba(102, 102, 255, 0.4);
+      }
+
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 15px;
+      }
+        
+      .main-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 0 60px rgba(102, 102, 255, 0.1),
+          0 8px 32px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        padding: 15px 0;
+        transition: transform 0.3s ease;
+        transform: translateY(0);
+      }
+
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1a1a2e;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo::before {
+        content: "🎯";
+        font-size: 28px;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-link {
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 25px;
+        text-decoration: none;
+        color: #1a1a2e;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-link::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        right: -1px;
+        bottom: -1px;
+        background: linear-gradient(45deg, #6666ff, #8a2be2);
+        border-radius: 25px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.4),
+          0 0 40px rgba(102, 102, 255, 0.2);
+      }
+
+      .nav-link:hover::before {
+        opacity: 0.3;
+      }
+
+      .nav-link.active {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        color: #ffffff;
+        box-shadow: 0 0 15px rgba(102, 102, 255, 0.5),
+          0 0 30px rgba(102, 102, 255, 0.3);
+      }
+
+      /* Кнопка переключения темы */
+      .theme-toggle {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(102, 102, 255, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .theme-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.5);
+      }
+
+      /* Кнопка настроек */
+      .settings-toggle {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+        border: none;
+        padding: 8px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(102, 102, 255, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: 16px;
+        min-width: 40px;
+        min-height: 40px;
+        aspect-ratio: 1;
+      }
+
+      .settings-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.5);
+      }
+
+      /* Вращение иконки настроек */
+      .settings-icon {
+        transition: transform 0.3s ease;
+        width: 24px;
+        height: 24px;
+        display: block;
+        flex-shrink: 0;
+        margin: auto;
+      }
+
+      .settings-icon.open {
+        transform: rotate(90deg);
+      }
+
+      /* Панель настроек */
+      .settings-panel {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 0 60px rgba(102, 102, 255, 0.1),
+          0 8px 32px rgba(0, 0, 0, 0.3);
+        z-index: 1001;
+        width: 300px;
+        display: none;
+      }
+
+      .settings-panel h3 {
+        margin-top: 0;
+        color: #1a1a2e;
+        text-align: center;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .setting-item {
+        margin-bottom: 15px;
+      }
+
+      .setting-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        color: #1a1a2e;
+        font-weight: 500;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background: linear-gradient(135deg, #6666ff, #8a2be2);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+      body.dark-theme .settings-panel {
+        background: rgba(30, 30, 46, 0.95);
+      }
+
+      body.dark-theme .setting-label {
+        color: #ffffff;
+      }
+
+      body.dark-theme .settings-panel h3 {
+        color: #ffffff;
+        border-bottom: 1px solid #4a4a8a;
+      }
+
+      /* Темная тема */
+      body.dark-theme {
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%);
+      }
+
+      body.dark-theme .main-header {
+        background: rgba(30, 30, 46, 0.95);
+        box-shadow: 0 0 20px rgba(102, 102, 255, 0.3),
+          0 0 40px rgba(102, 102, 255, 0.2), 0 0 60px rgba(102, 102, 255, 0.1),
+          0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      body.dark-theme .logo {
+        color: #ffffff;
+      }
+
+      body.dark-theme .nav-link {
+        background: rgba(30, 30, 46, 0.9);
+        color: #ffffff;
+      }
+
+      body.dark-theme .quiz-box {
+        background: rgba(30, 30, 46, 0.95);
+      }
+
+      body.dark-theme h2 {
+        color: #ffffff;
+      }
+
+      body.dark-theme .subtitle {
+        color: #aaaaaa;
+      }
+
+      body.dark-theme .btn-prev {
+        background: rgba(30, 30, 46, 0.9);
+        color: #ffffff;
+        border-color: #4a4a8a;
+      }
+
+      .result-type {
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid;
+        }
+        
+        /* Темная тема для результатов */
+        body.dark-theme .result-type {
+            background: rgba(30, 30, 46, 0.95);
+        }
+
+        body.dark-theme .result-type h3 {
+            color: #ffffff;
+        }
+
+        body.dark-theme .result-type p {
+            color: #cccccc;
+        }
+
+        body.dark-theme .dominant-type-title {
+            color: #ffffff;
+        }
+
+        body.dark-theme .profession-explanation {
+            color: #cccccc;
+        }
+    </style>
+  </head>
+  <body>
+    <header class="main-header" id="mainHeader">
+      <div class="header-container">
+        <a href="/" class="logo">CareerGuide</a>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <nav class="nav-menu">
+            <a href="/questions?user_id={{ user_id }}" class="nav-link">Тест</a>
+            <a href="/results?user_id={{ user_id }}" class="nav-link active">Результаты</a>
+            <a href="/chat/?user_id={{ user_id }}" class="nav-link">Чат-бот</a>
+            <a href="/all?user_id={{ user_id }}" class="nav-link">Все типы</a>
+          </nav>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="settings-toggle" id="settingsToggle" title="Настройки">
+              <svg class="settings-icon" id="settingsIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <input type="hidden" id="user_id" value="{{ user_id }}">
+    <div class="container">
+      <div class="quiz-box">
+        <div id="resultsContent">
+          <!-- Результаты загрузятся через JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/js/header.js"></script>
+    <script>
+      // Загружаем результаты при загрузке страницы
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get("user_id");
+        loadResults(userId);
+        highlightActivePage();
+      });
+
+      async function loadResults(userId) {
+        try {
+          console.log("Loading results for user:", userId);
+          const response = await fetch(`/get_user_results?user_id=${userId}`);
+
+          console.log("Response status:", response.status);
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Received data:", data);
+
+            // Проверяем структуру данных
+            if (data.results) {
+              showResults(data);
+            } else if (data.error) {
+              showError("Результаты не найдены: " + data.error);
+            } else {
+              showError("Неверный формат данных от сервера");
+            }
+          } else {
+            const errorText = await response.text();
+            showError(`Ошибка сервера: ${response.status} - ${errorText}`);
+          }
+        } catch (error) {
+          console.error("Error loading results:", error);
+          showError("Ошибка загрузки результатов: " + error.message);
+        }
+      }
+
+      function showResults(data) {
+        // Проверяем что data и data.results существуют
+        if (!data || !data.results) {
+          console.error("Invalid data structure:", data);
+          showError("Неверные данные результатов");
+          return;
+        }
+
+        // Проверяем что results содержит нужные поля
+        const results = data.results;
+        if (
+          typeof results.A === "undefined" ||
+          typeof results.B === "undefined" ||
+          typeof results.C === "undefined" ||
+          typeof results.D === "undefined"
+        ) {
+          console.error("Invalid results structure:", results);
+          showError("Неверная структура результатов");
+          return;
+        }
+
+        const hasImage =
+          data.image && data.image.startsWith("data:image/png;base64");
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get("user_id");
+
+        // Остальной код без изменений...
+        const dominantResult = getDominantType(data.results);
+        const redirectUrl = `/${dominantResult.group}`;
+
+        const content = document.getElementById("resultsContent");
+        content.innerHTML = `
+      ${
+        hasImage
+          ? `
+          <div style="text-align: center; margin: 30px 0;">
+              <img src="${data.image}" alt="График результатов" 
+                   style="max-width: 100%; max-height: 400px; border-radius: 15px; 
+                          box-shadow: 0 8px 25px rgba(0,0,0,0.15); border: 3px solid #6666ff;">
+          </div>
+      `
+          : `
+          <div style="text-align: center; margin: 20px 0; color: #ff6b6b;">
+              <p>⚠️ Не удалось создать график, но вот ваши результаты:</p>
+          </div>
+      `
+      }
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0;">
+          <div class="result-type" style="background: linear-gradient(135deg, rgba(102, 102, 255, 0.15), rgba(102, 102, 255, 0.25)); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid #6666FF;">
+              <div style="font-weight: bold; color: #6666FF; font-size: 16px; margin-bottom: 8px;">Практик-деятель</div>
+              <div style="font-size: 28px; font-weight: bold; color: #6666FF;">${
+                results.A || 0
+              }</div>
+              <div style="font-size: 12px; margin-top: 5px;" class="profession-explanation">Тебе важно видеть результаты своих усилий, ты энергичен и ориентирован на действие. Не боишься физ. труда и любишь, когда работа кипит.</div>
+          </div>
+          
+          <div class="result-type" style="background: linear-gradient(135deg, rgba(255, 102, 102, 0.15), rgba(255, 102, 102, 0.25)); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid #FF6666;">
+              <div style="font-weight: bold; color: #FF6666; font-size: 16px; margin-bottom: 8px;">Коммуникатор-организатор</div>
+              <div style="font-size: 28px; font-weight: bold; color: #FF6666;">${
+                results.B || 0
+              }</div>
+              <div style="font-size: 12px; margin-top: 5px;" class="profession-explanation">Ты любишь общение, умеешь находить общий язык с людьми, легко ведешь переговоры. Тебе нравится быть в центре внимания.</div>
+          </div>
+          
+          <div class="result-type" style="background: linear-gradient(135deg, rgba(102, 255, 102, 0.15), rgba(102, 255, 102, 0.25)); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid #66FF66;">
+              <div style="font-weight: bold; color: #66FF66; font-size: 16px; margin-bottom: 8px;">Творец-иноватор</div>
+              <div style="font-size: 28px; font-weight: bold; color: #66FF66;">${
+                results.C || 0
+              }</div>
+              <div style="font-size: 12px; margin-top: 5px;" class="profession-explanation">Ты не приемлешь шаблонов и стандартов. Ты креативен, любишь все необычное, умеешь видеть красоту в простом.</div>
+          </div>
+          
+          <div class="result-type" style="background: linear-gradient(135deg, rgba(255, 255, 102, 0.15), rgba(255, 255, 102, 0.25)); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid #FFFF66;">
+              <div style="font-weight: bold; color: #CCCC00; font-size: 16px; margin-bottom: 8px;">Аналитик-стратег</div>
+              <div style="font-size: 28px; font-weight: bold; color: #CCCC00;">${
+                results.D || 0
+              }</div>
+              <div style="font-size: 12px; margin-top: 5px;" class="profession-explanation">Ты любишь анализировать, размышлять, делать выводы. Ты стратег, умеешь планировать и видеть перспективу.</div>
+          </div>
+      </div>
+      
+      <div style="text-align: center; margin: 30px 0;">
+          <h3 class="dominant-type-title" style="font-size: 24px; margin-bottom: 15px;">${getDominantTypeTitle(
+            data.results
+          )}</h3>
+          <div style="font-size: 20px; font-weight: bold; color: #6666FF; margin-bottom: 20px;">
+              ${dominantResult.type}
+          </div>
+          ${
+            hasMultipleDominantTypes(data.results)
+              ? `<div style="font-size: 14px; color: #888; margin-top: 10px;">У вас несколько доминирующих типов, что делает вас уникальным!</div>`
+              : ""
+          }
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; margin-top: 30px; gap: 15px;">
+          <button class="btn btn-prev" onclick="window.location.href='/questions?user_id=${userId}'">
+              ← Назад к тесту
+          </button>
+          <button class="btn btn-next" onclick="window.location.href='${redirectUrl}?user_id=${userId}'">
+              Подробнее о типе →
+          </button>
+      </div>
+  `;
+      }
+
+      function showError(message) {
+        const content = document.getElementById("resultsContent");
+        content.innerHTML = `
+      <div style="text-align: center; color: #ff6b6b; padding: 40px 20px;">
+          <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+          <h3 style="margin-bottom: 15px;">Ошибка загрузки результатов</h3>
+          <p style="margin-bottom: 20px;">${message}</p>
+          <button class="btn btn-prev" onclick="window.location.reload()">
+              Повторить попытку
+          </button>
+      </div>
+  `;
+      }
+
+      function getDominantType(results) {
+        if (!results) return { type: "Не определен", group: "none" };
+
+        const types = [
+          { type: "A", name: "Практик-деятель", count: results.A || 0 },
+          {
+            type: "B",
+            name: "Коммуникатор-организатор",
+            count: results.B || 0,
+          },
+          { type: "C", name: "Творец-иноватор", count: results.C || 0 },
+          { type: "D", name: "Аналитик-стратег", count: results.D || 0 },
+        ];
+
+        // Сортируем по убыванию
+        types.sort((a, b) => b.count - a.count);
+
+        // Находим максимальное значение
+        const maxCount = types[0].count;
+
+        // Находим все типы с максимальным значением
+        const dominantTypes = types.filter((t) => t.count === maxCount);
+
+        // Формируем строку с буквами типов
+        const typeLetters = dominantTypes
+          .map((t) => t.type)
+          .sort()
+          .join("");
+        let group;
+
+        switch (dominantTypes.length) {
+          case 1:
+            group = dominantTypes[0].type; // "A", "B", "C", "D"
+            break;
+          case 2:
+            group = typeLetters; // "AB", "AC", "AD", "BC", "BD", "CD"
+            break;
+          case 3:
+            group = typeLetters; // "ABC", "ABD", "ACD", "BCD"
+            break;
+          case 4:
+            group = "all";
+            break;
+          default:
+            group = "none";
+        }
+
+        // Формируем текстовое представление
+        let typeText;
+        switch (dominantTypes.length) {
+          case 1:
+            typeText = dominantTypes[0].name;
+            break;
+          case 2:
+            typeText = `${dominantTypes[0].name} и ${dominantTypes[1].name}`;
+            break;
+          case 3:
+            typeText = `${dominantTypes[0].name}, ${dominantTypes[1].name} и ${dominantTypes[2].name}`;
+            break;
+          case 4:
+            typeText = "Сбалансированный тип (все качества развиты одинаково)";
+            break;
+          default:
+            typeText = "Не определен";
+        }
+
+        return { type: typeText, group: group };
+      }
+
+      function getDominantTypeTitle(results) {
+        if (!results) return "📈 Ваш основной тип:";
+
+        const types = [
+          { type: "A", name: "Практик-деятель", count: results.A || 0 },
+          {
+            type: "B",
+            name: "Коммуникатор-организатор",
+            count: results.B || 0,
+          },
+          { type: "C", name: "Творец-иноватор", count: results.C || 0 },
+          { type: "D", name: "Аналитик-стратег", count: results.D || 0 },
+        ];
+
+        types.sort((a, b) => b.count - a.count);
+        const maxCount = types[0].count;
+        const dominantTypes = types.filter((t) => t.count === maxCount);
+
+        return dominantTypes.length === 4
+          ? "🎯 Ваш тип личности:"
+          : "📈 Ваш основной тип:";
+      }
+
+      function hasMultipleDominantTypes(results) {
+        if (!results) return false;
+
+        const types = [
+          { type: "A", name: "Практик-деятель", count: results.A || 0 },
+          {
+            type: "B",
+            name: "Коммуникатор-организатор",
+            count: results.B || 0,
+          },
+          { type: "C", name: "Творец-иноватор", count: results.C || 0 },
+          { type: "D", name: "Аналитик-стратег", count: results.D || 0 },
+        ];
+
+        types.sort((a, b) => b.count - a.count);
+        const maxCount = types[0].count;
+        const dominantTypes = types.filter((t) => t.count === maxCount);
+
+        return dominantTypes.length > 1;
+      }
+
+      function highlightActivePage() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        navLinks.forEach((link) => {
+          const linkPath = link.getAttribute("href").split("?")[0]; // Убираем query параметры
+          if (linkPath === currentPath || (linkPath === '/results' && currentPath === '/results/')) {
+            link.classList.add("active");
+          } else {
+            link.classList.remove("active");
+          }
+        });
+      }
+    </script>
+
+    <script>
+      // Theme toggle functionality
+      document.addEventListener('DOMContentLoaded', function() {
+          const body = document.body;
+          
+          // Settings panel functionality
+          const settingsToggle = document.getElementById('settingsToggle');
+          const settingsPanel = document.getElementById('settingsPanel');
+          const settingsIcon = document.getElementById('settingsIcon');
+          
+          // Проверяем сохраненную тему в localStorage
+          const savedTheme = localStorage.getItem('theme');
+          if (savedTheme === 'dark') {
+              body.classList.add('dark-theme');
+          }
+          
+          // Settings panel toggle with rotation animation
+          settingsToggle.addEventListener('click', function() {
+              if (settingsPanel.style.display === 'block') {
+                  // Closing panel - rotate back to original position
+                  settingsIcon.classList.remove('open');
+                  settingsPanel.style.display = 'none';
+              } else {
+                  // Opening panel - rotate icon
+                  settingsIcon.classList.add('open');
+                  settingsPanel.style.display = 'block';
+              }
+          });
+          
+          // Close settings panel when clicking outside
+          document.addEventListener('click', function(event) {
+              if (!settingsPanel.contains(event.target) && 
+                  event.target !== settingsToggle && 
+                  !settingsToggle.contains(event.target)) {
+                  settingsPanel.style.display = 'none';
+                  settingsIcon.classList.remove('open');
+              }
+          });
+          
+          // Dark theme toggle in settings panel
+          const darkThemeToggle = document.getElementById('darkThemeToggle');
+          if (darkThemeToggle) {
+              // Set initial state
+              if (savedTheme === 'dark') {
+                  darkThemeToggle.checked = true;
+              }
+              
+              darkThemeToggle.addEventListener('change', function() {
+                  if (this.checked) {
+                      body.classList.add('dark-theme');
+                      localStorage.setItem('theme', 'dark');
+                  } else {
+                      body.classList.remove('dark-theme');
+                      localStorage.setItem('theme', 'light');
+                  }
+              });
+          }
+      });
+    </script>
+
+    <!-- Панель настроек -->
+    <div class="settings-panel" id="settingsPanel">
+      <h3>Настройки</h3>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span>Темная тема</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="darkThemeToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span>Уведомления</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="notificationsToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
